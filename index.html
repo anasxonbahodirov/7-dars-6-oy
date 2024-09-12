@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comments</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .comment {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Comments</h1>
+    <div id="comments-container"></div>
+
+    <script>
+        // Asynxron funksiyani yaratamiz
+        async function fetchComments() {
+            try {
+                // API'ga so'rov yuboramiz
+                const response = await fetch('https://jsonplaceholder.typicode.com/comments');
+                
+                // Agar so'rov muvaffaqiyatli bo'lsa, natijani json formatida qaytaramiz
+                if (response.ok) {
+                    const comments = await response.json();
+                    
+                    // 20 ta kommentni olamiz
+                    const first20Comments = comments.slice(0, 20);
+                    
+                    // Kommentlarni DOM'ga chiqaramiz
+                    const commentsContainer = document.getElementById('comments-container');
+                    first20Comments.forEach(comment => {
+                        const commentElement = document.createElement('div');
+                        commentElement.classList.add('comment');
+                        commentElement.innerHTML = `
+                            <h3>${comment.name}</h3>
+                            <p><strong>Email:</strong> ${comment.email}</p>
+                            <p>${comment.body}</p>
+                        `;
+                        commentsContainer.appendChild(commentElement);
+                    });
+                } else {
+                    console.error('API bilan bog\'lanishda xatolik yuz berdi');
+                }
+            } catch (error) {
+                console.error('Xatolik:', error);
+            }
+        }
+
+        // Funksiyani chaqiramiz
+        fetchComments();
+    </script>
+
+</body>
+</html>
